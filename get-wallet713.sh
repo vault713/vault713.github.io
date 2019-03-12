@@ -20,7 +20,7 @@ echo "Location:      [${url}]"
 echo "Directory:     [/usr/local/bin]"
 echo "${NC}"
 
-curl -s -J -L ${url} | tar xz -C /usr/local/bin
+curl -J -L ${url} | tar xz -C /usr/local/bin
 
 if [ $? -eq 0 ]
 then
