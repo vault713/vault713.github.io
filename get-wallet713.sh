@@ -34,7 +34,9 @@ then
   echo "Installation completed successfully."
   echo "$ wallet713 --version"
   ${bin_dir}/wallet713 --version
-  [[ ":$PATH:" != *":${bin_dir}:"* ]] && echo "${YELLOW}\nPlease open a new terminal window to run \`wallet713\` from the command-line"
+  if ! echo ":$PATH:"| grep -q  ".*:${bin_dir}:.*"; then 
+  	echo "${YELLOW}\nPlease open a new terminal window to run \`wallet713\` from the command-line"
+  fi
 else
   echo "${RED}"
   echo "Failed installing wallet713"
