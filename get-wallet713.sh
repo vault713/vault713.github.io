@@ -3,31 +3,38 @@ version="1.0"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[1;34m'
+YELLOW='\033[1;33m'
 DARK='\033[1;30m'
 NC='\033[0m'
 
 echo "${BLUE}Wallet713 binary installer ${version}${NC}"
 unameOut="$(uname -s)"
 case "${unameOut}" in
-    Darwin*)    arch=osx;;
+    Darwin*)    arch=osx
+    			bin_dir="/usr/local/bin"
+    			;; 
     *)          arch=amd64
+    			bin_dir="${HOME}/bin"
+    			;;
 esac
 url=$(curl -s https://api.github.com/repos/vault713/wallet713/releases/latest | grep "browser_download_url.*${arch}.tgz\"" | cut -d : -f 2,3 | tr -d '\"[:space:]')
 
 echo "${DARK}"
 echo "Configuration: [${arch}]"
 echo "Location:      [${url}]"
-echo "Directory:     [/usr/local/bin]"
+echo "Directory:     [${bin_dir}]"
 echo "${NC}"
 
-curl -J -L ${url} | tar xz -C /usr/local/bin
+test ! -d ${bin_dir} && mkdir ${bin_dir}
+curl -J -L ${url} | tar xz -C ${bin_dir}
 
 if [ $? -eq 0 ]
 then
   echo "${GREEN}"
   echo "Installation completed successfully."
   echo "$ wallet713 --version"
-  /usr/local/bin/wallet713 --version
+  ${bin_dir}/wallet713 --version
+  [[ ":$PATH:" != *":${bin_dir}:"* ]] && echo "${YELLOW}\nPlease open a new terminal window to run \`wallet713\` from the command-line"
 else
   echo "${RED}"
   echo "Failed installing wallet713"
